@@ -44,7 +44,7 @@ export const defaultLocalization = {
  * @param {CropImageModalProps & ModalProps} props
  * @returns {JSX.Element}
  */
-export default function CropImageModal({
+export function CropImageModal({
     imageFile,
     setImageFile,
     imageSize,
