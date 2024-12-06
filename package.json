@@ -1,8 +1,8 @@
 {
-  "name": "@leakeddave/my-jsx-package",
-  "homepage": "https://github.com/LeakedDave/my-jsx-package",
-  "version": "1.0.3",
-  "description": "",
+  "name": "@daveyplate/nextui-crop-image-modal",
+  "homepage": "https://github.com/daveyplate/nextui-crop-image-modal",
+  "version": "1.0.0",
+  "description": "Shows a modal to crop an image",
   "module": "dist/index",
   "types": "dist/index",
   "files": [
@@ -14,14 +14,22 @@
     "dev": "nodemon --exec 'npm run build'",
     "prepublishOnly": "npm run build"
   },
-  "keywords": [],
-  "author": "LeakedDave",
+  "keywords": [
+    "react",
+    "nextjs",
+    "modal",
+    "image",
+    "crop",
+    "nextui"
+  ],
+  "author": "daveycodez",
   "license": "ISC",
   "devDependencies": {
     "@babel/cli": "^7.25.7",
     "@babel/core": "^7.25.7",
     "@babel/preset-env": "^7.25.7",
     "@babel/preset-react": "^7.25.7",
+    "@types/react": "^19.0.1",
     "nodemon": "^3.1.7",
     "react": "file:../daveyplate/node_modules/react",
     "swr": "file:../daveyplate/node_modules/swr",
@@ -29,6 +37,8 @@
   },
   "peerDependencies": {
     "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
+    "react-dom": ">=18.0.0",
+    "@nextui-org/react": ">=2.6.0",
+    "compressorjs": ">=1.2.0"
   }
 }
