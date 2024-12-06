@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import Compressor from "compressorjs"
 import AvatarEditor from "react-avatar-editor"
-import { File } from 'node:buffer'
 
 import {
     Button,
