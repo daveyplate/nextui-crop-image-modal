@@ -10,9 +10,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "babel src --out-dir dist && npx tsc",
-    "dev": "nodemon --exec 'npm run build'",
-    "prepublishOnly": "npm run build"
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "rm -rf dist && npm run build"
   },
   "keywords": [
     "react",
@@ -25,20 +25,33 @@
   "author": "daveycodez",
   "license": "ISC",
   "devDependencies": {
-    "@babel/cli": "^7.25.7",
-    "@babel/core": "^7.25.7",
-    "@babel/preset-env": "^7.25.7",
-    "@babel/preset-react": "^7.25.7",
+    "@eslint/js": "^9.16.0",
+    "@nextui-org/react": "file:../daveyplate/node_modules/@nextui-org/react",
     "@types/react": "^19.0.1",
-    "nodemon": "^3.1.7",
+    "@types/react-avatar-editor": "^13.0.3",
+    "eslint": "^9.16.0",
+    "eslint-plugin-react": "^7.37.2",
+    "framer-motion": "file:../daveyplate/node_modules/framer-motion",
+    "globals": "^15.13.0",
     "react": "file:../daveyplate/node_modules/react",
+    "react-dom": "file:../daveyplate/node_modules/react-dom",
     "swr": "file:../daveyplate/node_modules/swr",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.17.0"
   },
   "peerDependencies": {
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0",
     "@nextui-org/react": ">=2.4.0",
-    "compressorjs": ">=1.2.0"
+    "compressorjs": ">=1.2.0",
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "dependencies": {
+    "react-avatar-editor": "^13.0.2"
+  },
+  "overrides": {
+    "react-avatar-editor": {
+      "react": ">=18.0.0",
+      "react-dom": ">=18.0.0"
+    }
   }
 }

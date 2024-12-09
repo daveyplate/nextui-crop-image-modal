@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Compressor from "compressorjs"
 import AvatarEditor from "react-avatar-editor"
 
@@ -13,35 +13,44 @@ import {
     ModalProps
 } from "@nextui-org/react"
 
-/**
- * @typedef {Object} CropModalLocalization
- * @property {string} [header="Crop Image"] - The header text of the modal
- * @property {string} [cancel="Cancel"] - The text of the cancel button
- * @property {string} [confirm="Confirm"] - The text of the confirm button
- */
+interface CropModalLocalization {
+    header?: string
+    cancel?: string
+    confirm?: string
+}
 
-export const defaultLocalization = {
+export const defaultLocalization: CropModalLocalization = {
     header: "Crop Image",
     cancel: "Cancel",
     confirm: "Confirm"
 }
 
+interface CropImageModalProps {
+    imageFile: File | null
+    setImageFile: (file: File | null) => void
+    imageSize: {
+        width: number
+        height: number
+    }
+    imageRadius?: "sm" | "md" | "lg" | "xl" | "full" | "none"
+    onConfirm?: (croppedImage: File) => void
+    onError?: (error: Error) => void
+    localization?: CropModalLocalization
+}
+
 /**
  * Displays a modal to crop an image
  * 
- * @typedef {object} CropImageModalProps
- * @property {File} imageFile - The image file to crop
- * @property {(file: File) => void} setImageFile - Set the image file
- * @property {object} imageSize - The desired size of the image to crop, with width and height
- * @property {number} imageSize.width - The width of the image
- * @property {number} imageSize.height - The height of the image
- * @property {("sm"| "md" | "lg" | "xl" | "full" | "none")} [imageRadius="sm"] - The border radius of the image
- * @property {(croppedImage: File) => void} onConfirm - Callback with the cropped image file
- * @property {(error: Error) => void} onError - Callback when an error occurs
- * @property {CropModalLocalization} [localization] - The localization of the modal
- * 
- * @param {CropImageModalProps & ModalProps} props
- * @returns {JSX.Element}
+ * @param {CropImageModalProps} props
+ * @param {File} props.imageFile - The image file to crop
+ * @param {(file: File) => void} props.setImageFile - Set the image file
+ * @param {object} props.imageSize - The desired size of the image to crop, with width and height
+ * @param {number} props.imageSize.width - The width of the image
+ * @param {number} props.imageSize.height - The height of the image
+ * @param {("sm"| "md" | "lg" | "xl" | "full" | "none")} [props.imageRadius="md"] - The border radius of the image
+ * @param {(croppedImage: File) => void} [props.onConfirm] - Callback with the cropped image file
+ * @param {(error: Error) => void} [props.onError] - Callback when an error occurs
+ * @param {CropModalLocalization} [props.localization] - The localization of the modal
  */
 export function CropImageModal({
     imageFile,
@@ -52,11 +61,11 @@ export function CropImageModal({
     onError,
     localization = {},
     ...props
-}) {
+}: CropImageModalProps & ModalProps) {
     localization = { ...defaultLocalization, ...localization }
 
     const [imageScale, setImageScale] = useState(1)
-    const editor = useRef(null)
+    const editor = useRef<AvatarEditor>(null)
 
     const maxImageWidth = 256
     const calculatedHeight = maxImageWidth / imageSize?.width * imageSize?.height
@@ -73,10 +82,11 @@ export function CropImageModal({
     useEffect(() => setImageScale(1), [imageFile])
 
     const handleConfirm = async () => {
-        const canvas = editor.current.getImage()
+        const canvas = editor.current?.getImage()
 
         // Convert the canvas blob to a file, then compress it
-        canvas.toBlob(blob => {
+        canvas?.toBlob((blob) => {
+            if (!blob) return
             const blobFile = new File([blob], "blob.jpg", { type: "image/jpeg" })
 
             new Compressor(blobFile, {
@@ -85,12 +95,12 @@ export function CropImageModal({
                 resize: "cover",
                 mimeType: "image/jpeg",
                 success: async (compressedFile) => {
-                    onConfirm && onConfirm(compressedFile)
+                    if (onConfirm) onConfirm((compressedFile as File))
                     setImageFile(null)
                 },
                 error(error) {
                     console.error(error)
-                    onError && onError(error)
+                    if (onError) onError(error)
                     setImageFile(null)
                 }
             })
@@ -108,7 +118,7 @@ export function CropImageModal({
                 {(onClose) => (
                     <>
                         <ModalHeader>
-                            {defaultLocalization.header}
+                            {localization.header}
                         </ModalHeader>
 
                         <ModalBody className="items-center gap-4">
@@ -116,7 +126,7 @@ export function CropImageModal({
                                 className="rounded-xl"
                                 borderRadius={calculatedRadius}
                                 ref={editor}
-                                image={imageFile}
+                                image={imageFile || ""}
                                 width={maxImageWidth}
                                 height={calculatedHeight}
                                 scale={imageScale}
@@ -130,20 +140,20 @@ export function CropImageModal({
                                 maxValue={3}
                                 minValue={1}
                                 step={0.01}
-                                onChange={(value) => setImageScale(value)}
+                                onChange={(value) => setImageScale((value as number))}
                             />
                         </ModalBody>
 
                         <ModalFooter>
                             <Button variant="light" onPress={onClose}>
-                                {defaultLocalization.cancel}
+                                {localization.cancel}
                             </Button>
 
                             <Button
                                 onPress={handleConfirm}
                                 color="primary"
                             >
-                                {defaultLocalization.confirm}
+                                {localization.confirm}
                             </Button>
                         </ModalFooter>
                     </>
