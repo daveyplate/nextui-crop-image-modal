@@ -13,10 +13,11 @@ import {
     ModalProps
 } from "@nextui-org/react"
 
-interface CropModalLocalization {
+export interface CropModalLocalization {
     header?: string
     cancel?: string
     confirm?: string
+    [key: string]: string | undefined
 }
 
 export const defaultLocalization: CropModalLocalization = {
@@ -36,6 +37,8 @@ interface CropImageModalProps {
     onConfirm?: (croppedImage: File) => void
     onError?: (error: Error) => void
     localization?: CropModalLocalization
+    children?: React.ReactNode | null
+    modalProps?: ModalProps
 }
 
 /**
@@ -60,8 +63,9 @@ export function CropImageModal({
     onConfirm,
     onError,
     localization = {},
+    modalProps,
     ...props
-}: CropImageModalProps & ModalProps) {
+}: CropImageModalProps) {
     localization = { ...defaultLocalization, ...localization }
 
     const [imageScale, setImageScale] = useState(1)
@@ -112,6 +116,7 @@ export function CropImageModal({
             isOpen={!!imageFile}
             onOpenChange={() => setImageFile(null)}
             placement="center"
+            {...modalProps}
             {...props}
         >
             <ModalContent>
