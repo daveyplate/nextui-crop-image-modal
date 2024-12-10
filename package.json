@@ -1,7 +1,7 @@
 {
   "name": "@daveyplate/nextui-crop-image-modal",
   "homepage": "https://github.com/daveyplate/nextui-crop-image-modal",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Shows a modal to crop an image",
   "module": "dist/index",
   "types": "dist/index",
